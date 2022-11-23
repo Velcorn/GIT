@@ -353,3 +353,7 @@ build/
 *.egg-info/
 output/
 
+# JW: Additional ignores
+.idea/
+/venv/
+dataset/*
