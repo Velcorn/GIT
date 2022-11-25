@@ -133,8 +133,9 @@ def get_image_transform(param):
 
 def test_git_inference_single_tsv(image_tsv, model_name, question_tsv, out_tsv):
     param = {}
-    if File.isfile(f'output/{model_name}/parameter.yaml'):
-        param = load_from_yaml_file(f'output/{model_name}/parameter.yaml')
+    # JW Update reference to correct model
+    if File.isfile(f'aux_data/models/{model_name}/parameter.yaml'):
+        param = load_from_yaml_file(f'aux_data/models/{model_name}/parameter.yaml')
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
     image_tsv = TSVFile(image_tsv)
@@ -170,7 +171,7 @@ def test_git_inference_single_tsv(image_tsv, model_name, question_tsv, out_tsv):
 
     if question_tsv:
         def gen_rows():
-            for i  in tqdm(range(curr_start, curr_end)):
+            for i in tqdm(range(curr_start, curr_end)):
                 image_key, image_col = image_tsv[i]
                 q_key, q_info = question_tsv[i]
                 assert image_key == q_key
@@ -199,7 +200,7 @@ def test_git_inference_single_tsv(image_tsv, model_name, question_tsv, out_tsv):
                     yield json_dump(result),
     else:
         def gen_rows():
-            for i  in tqdm(range(curr_start, curr_end)):
+            for i in tqdm(range(curr_start, curr_end)):
                 key, col = image_tsv[i]
                 img = pilimg_from_base64(col)
                 img = transforms(img)
