@@ -22,17 +22,17 @@ def main():
     infos = json.loads(read_to_buffer(json_file))
 
     def gen_img_rows():
-        for idx, inf in enumerate(infos):
-            idx = str(idx).zfill(4)
-            payload = base64.b64encode(read_to_buffer(op.join(image_folder, inf['image'])))
-            yield idx, payload
+        for info in infos:
+            name = info['image']
+            payload = base64.b64encode(read_to_buffer(op.join(image_folder, name)))
+            yield name, payload
     tsv_writer(gen_img_rows(), f'vizwiz/image_{subset}.tsv')
 
     def gen_question_rows():
-        for idx, inf in enumerate(infos):
-            idx = str(idx).zfill(4)
-            question = [{'question_id': idx, 'question': inf['question'].lower()}]
-            yield idx, json_dump(question)
+        for info in infos:
+            name = info['image']
+            question = [{'question_id': name, 'question': info['question'].lower()}]
+            yield name, json_dump(question)
     tsv_writer(gen_question_rows(), f'vizwiz/question_{subset}.tsv')
 
     return 'Finished creating tsv files!'
